@@ -53,39 +53,38 @@ DescriptorDatabase::~DescriptorDatabase() {}
 template <typename Value>
 bool SimpleDescriptorDatabase::DescriptorIndex<Value>::AddFile(
     const FileDescriptorProto& file, Value value) {
-  printf("here1 %s\n", file.name());
+  GOOGLE_LOG(ERROR) << "here1" << file.name();
   if (!InsertIfNotPresent(&by_name_, file.name(), value)) {
-    printf("here2\n");
-    // GOOGLE_LOG(ERROR) << "File already exists in database: " << file.name();
+    GOOGLE_LOG(ERROR) << "File already exists in database: " << file.name();
     return false;
   }
 
   // We must be careful here -- calling file.package() if file.has_package() is
   // false could access an uninitialized static-storage variable if we are being
   // run at startup time.
-  printf("here3\n");
+  GOOGLE_LOG(ERROR) << "here3";
   string path = file.has_package() ? file.package() : string();
   if (!path.empty()) path += '.';
 
-  printf("here4\n");
+  GOOGLE_LOG(ERROR) << "here4";
   for (int i = 0; i < file.message_type_size(); i++) {
     if (!AddSymbol(path + file.message_type(i).name(), value)) return false;
     if (!AddNestedExtensions(file.message_type(i), value)) return false;
   }
-  printf("here5\n");
+  GOOGLE_LOG(ERROR) << "here5";
   for (int i = 0; i < file.enum_type_size(); i++) {
     if (!AddSymbol(path + file.enum_type(i).name(), value)) return false;
   }
-  printf("here6\n");
+  GOOGLE_LOG(ERROR) << "here6";
   for (int i = 0; i < file.extension_size(); i++) {
     if (!AddSymbol(path + file.extension(i).name(), value)) return false;
     if (!AddExtension(file.extension(i), value)) return false;
   }
-  printf("here7\n");
+  GOOGLE_LOG(ERROR) << "here7";
   for (int i = 0; i < file.service_size(); i++) {
     if (!AddSymbol(path + file.service(i).name(), value)) return false;
   }
-  printf("here8\n");
+  GOOGLE_LOG(ERROR) << "here8";
 
   return true;
 }
