@@ -53,7 +53,7 @@ DescriptorDatabase::~DescriptorDatabase() {}
 template <typename Value>
 bool SimpleDescriptorDatabase::DescriptorIndex<Value>::AddFile(
     const FileDescriptorProto& file, Value value) {
-  printf("here1 %s\n" % file.name());
+  printf("here1 %s\n", file.name());
   if (!InsertIfNotPresent(&by_name_, file.name(), value)) {
     printf("here2\n");
     // GOOGLE_LOG(ERROR) << "File already exists in database: " << file.name();
